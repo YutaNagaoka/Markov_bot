@@ -6,8 +6,8 @@ import os
 def make_vocab_file(input_dir_name, output_file_name):
     """
     jsonファイルが入ったディレクトリを読み込んでテキストファイルを生成する
-    :param input_dir_name -- 読み込むjsonファイルが入ったディレクトリ名 ※対話破綻コーパスのjsonファイルに限る
-    :param output_file_name -- 出力するテキストファイル名
+    :param input_dir_name : 読み込むjsonファイルが入ったディレクトリ名 ※対話破綻コーパスのjsonファイルに限る
+    :param output_file_name : 出力するテキストファイル名
     """
     input_dir = os.listdir(input_dir_name)
     output_file = open(output_file_name, "w", encoding="utf-8")
@@ -28,8 +28,8 @@ def make_vocab_file(input_dir_name, output_file_name):
 def modify_str(word):
     """
     入力文字列から特定の文字列を取り除く
-    :param word
-    :return: modified_word
+    :param word: 入力文字列
+    :return: modified_word: 入力から特定の文字列を取り除いた文字列
     """
     # 以下の文字は除外する
     exceptional_char = [',', '.', '、', '。', '?', '？', '!', '！', '～', 'ー', '「', '」']

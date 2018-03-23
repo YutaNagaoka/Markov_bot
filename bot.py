@@ -28,6 +28,28 @@ class Bot2:
         self.corpus_path = corpus_path
         self.n = n
 
+    def generate_text(self, triplet_list):
+        """
+        ランダムな1文を生成する
+        :param triplet_list: 三つ組のlist
+        :return: 生成された1文
+        """
+        utterance = []
+
+        candidate = [s for s in triplet_list if s[0] == self.BEGIN]
+        first_triplet = random.choice(candidate)
+        utterance.append(first_triplet[1])
+        utterance.append(first_triplet[2])
+
+        while utterance[-1] != self.END:
+            prefix1 = utterance[-2]
+            prefix2 = utterance[-1]
+            triplet = self.search_triplet(triplet_list, (prefix1, prefix2))
+            utterance.append(triplet[2])
+
+        result = "".join(utterance[:-1])
+        return result
+
     def morpheme_analysis(self, sentence):
         """
         1文の形態素解析を行う
@@ -38,49 +60,54 @@ class Bot2:
         morphemes = [token.surface for token in token_list]
         return morphemes
 
-    def generate_quartet(self, morphemes):
+    def generate_triplet(self, morphemes):
         """
-        形態素に分割された文字列型のlistを四つ組にする
+        形態素に分割された文字列型のlistを三つ組にする
         :param morphemes: 形態素に分割された文字列型のlist
-        :return: 四つ組
+        :return: 三つ組
         """
-        if len(morphemes) < 4:
+        if len(morphemes) < 3:
             return []
 
-        quartet = []
-        for i in range(len(morphemes) - 3):
-            quartet.append(morphemes[i:i+4])
+        triplet = []
+        for i in range(len(morphemes) - 2):
+            triplet.append(morphemes[i:i+3])
 
         # BOSを追加
-        quartet.insert(0, [self.BEGIN, morphemes[0], morphemes[1], morphemes[2]])
+        triplet.insert(0, [self.BEGIN, morphemes[0], morphemes[1]])
         # EOSを追加
-        quartet.append([morphemes[-3], morphemes[-2], morphemes[-1], self.END])
+        triplet.append([morphemes[-2], morphemes[-1], self.END])
 
-        return quartet
+        return triplet
 
-    def txt2quartets(self):
+    def txt2triplet(self):
         """
-        コーパスの全文を形態素解析して四つ組に分割する
-        :return: 四つ組のlist(二次元list)
+        コーパスの全文を形態素解析して三つ組に分割する
+        :return: 三つ組のlist(二次元list)
         """
         quartet_list = []
         with open(self.corpus_path, "r") as corpus:
             for sentence in corpus:
                 morphemes = self.morpheme_analysis(sentence)
-                quartet = self.generate_quartet(morphemes)
+                quartet = self.generate_triplet(morphemes)
                 quartet_list.append(quartet)
 
         return quartet_list
 
-    def generate_text(self, quartet_list):
-        utterance = []
+    def search_triplet(self, triplet_list, prefixes):
+        """
+        三つ組のlistの中から条件(prefixes)に適する三つ組を取得
+        :param triplet_list: 三つ組のlist
+        :param prefixes: 条件(prefix1, prefix2)
+        :return: 三つ組
+        """
+        candidate = []
+        for triplet in triplet_list:
+            if triplet[0] == prefixes[0] and triplet[1] == prefixes[1]:
+                candidate.append(triplet)
 
-        candidate = [s for s in quartet_list if s[0] == self.BEGIN]
-        first_quartet = random.choice(candidate)
-        utterance.append(first_quartet[1])
-        utterance.append(first_quartet[2])
-        utterance.append(first_quartet[3])
-
+        result = random.choice(candidate)
+        return result
 
 
 if __name__ == '__main__':
