@@ -6,6 +6,7 @@ from measure_time import measure_time
 t = Tokenizer()
 
 
+# ボツ
 class Bot1:
     def __init__(self, corpus, word_length):
         self.corpus = corpus
