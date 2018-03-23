@@ -1,20 +1,13 @@
 # -*- coding: utf-8 -*-
-
 import json
 import os
-from janome.tokenizer import Tokenizer
-
-# tokenizerの初期化
-tokenizer = Tokenizer()
 
 
 def make_vocab_file(input_dir_name, output_file_name):
     """
-    jsonファイルが入ったディレクトリを読み込んで形態素解析した単語を出力する。
-
+    jsonファイルが入ったディレクトリを読み込んでテキストファイルを生成する
     :param input_dir_name -- 読み込むjsonファイルが入ったディレクトリ名 ※対話破綻コーパスのjsonファイルに限る
-
-    :param output_file_name -- 形態素解析した語を出力するテキストファイル名
+    :param output_file_name -- 出力するテキストファイル名
     """
     input_dir = os.listdir(input_dir_name)
     output_file = open(output_file_name, "w", encoding="utf-8")
@@ -24,28 +17,26 @@ def make_vocab_file(input_dir_name, output_file_name):
         with open(path, "r", encoding="utf-8") as f:
             json_data = json.load(f)
             for turn in json_data["turns"]:
-                token_list = tokenizer.tokenize(turn["utterance"])
-                token = list2str(token_list)
+                token = turn["utterance"]
+                token = modify_str(token)
                 output_file.write(token + "\n")
 
     output_file.close()
     print("Succeeded!")
 
 
-def list2str(words):
+def modify_str(word):
     """
-    形態素解析した語のリストを改行文字を区切り文字として連結する。
-
-    :param words
-
-    :return: joined_words
+    入力文字列から特定の文字列を取り除く
+    :param word
+    :return: modified_word
     """
     # 以下の文字は除外する
     exceptional_char = [',', '.', '、', '。', '?', '？', '!', '！', '～', 'ー', '「', '」']
-    words_list = [word.surface for word in words if word.surface not in exceptional_char]
-    joined_words = "\n".join(words_list)
-    return joined_words
+    words_list = [c for c in word if c not in exceptional_char]
+    modified_word = "".join(words_list)
+    return modified_word
+
 
 if __name__ == '__main__':
     make_vocab_file("JSON_corpus", "vocabulary.txt")
-
