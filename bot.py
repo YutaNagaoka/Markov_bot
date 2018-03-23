@@ -27,9 +27,8 @@ class Bot2:
     BEGIN = "__BOS__"
     END = "__EOS__"
 
-    def __init__(self, corpus_path, n):
+    def __init__(self, corpus_path):
         self.corpus_path = corpus_path
-        self.n = n
 
     @measure_time
     def utter(self):
@@ -38,6 +37,19 @@ class Bot2:
         """
         triplet_list = self.txt2triplet()
         for i in range(self.n):
+            utterance = self.generate_text(triplet_list)
+            print(utterance)
+        print(os.linesep)
+
+    def dialogue(self):
+        """
+        任意の回数会話を繰り返す
+        """
+        triplet_list = self.txt2triplet()
+        while True:
+            s = input("Press Enter> ")
+            if s == "quit":
+                break
             utterance = self.generate_text(triplet_list)
             print(utterance)
         print(os.linesep)
@@ -132,5 +144,9 @@ class Bot2:
 
 
 if __name__ == '__main__':
-    bot = Bot2("vocabulary.txt", 5)
-    bot.utter()
+    bot = Bot2("vocabulary.txt")
+    # n回発話
+    # bot.utter(5)
+
+    # 任意の回数発話
+    bot.dialogue()
