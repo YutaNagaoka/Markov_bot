@@ -32,7 +32,7 @@ def modify_str(word):
     :return: modified_word: 入力から特定の文字列を取り除いた文字列
     """
     # 以下の文字は除外する
-    exceptional_char = [',', '.', '、', '。', '?', '？', '!', '！', '～', 'ー', '「', '」']
+    exceptional_char = [',', '.', '、', '。', '?', '？', '!', '！', '「', '」']
     words_list = [c for c in word if c not in exceptional_char]
     modified_word = "".join(words_list)
     return modified_word

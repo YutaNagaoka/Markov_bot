@@ -1,7 +1,25 @@
 import random
 from janome.tokenizer import Tokenizer
+from functools import wraps
+import time
+import os
 
 t = Tokenizer()
+
+
+def measure_time(func):
+    """
+    引数に取った関数の時間計測をする
+    :param func: 時間計測したい関数
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        elapsed_time = time.time() - start
+        print(str(func.__name__) + "は" + str(elapsed_time) + "秒かかりました\n")
+        return result
+    return wrapper
 
 
 class Bot1:
@@ -15,7 +33,7 @@ class Bot1:
 
         for i in range(10):
             utterance = random.sample(vocab_list, k=self.word_length)
-            utterance = [s.strip("\n") for s in utterance]
+            utterance = [s.strip(os.linesep) for s in utterance]
             utterance = "".join(utterance)
             print(utterance)
 
@@ -28,6 +46,7 @@ class Bot2:
         self.corpus_path = corpus_path
         self.n = n
 
+    @measure_time
     def utter(self):
         """
         n回発話し、ユーザとのインターフェースになる
@@ -36,6 +55,7 @@ class Bot2:
         for i in range(self.n):
             utterance = self.generate_text(triplet_list)
             print(utterance)
+        print(os.linesep)
 
     def generate_text(self, triplet_list):
         """
@@ -62,6 +82,7 @@ class Bot2:
         result = "".join(utterance[:-1])
         return result
 
+    @measure_time
     def txt2triplet(self):
         """
         コーパスの全文を形態素解析して三つ組に分割する
@@ -77,7 +98,8 @@ class Bot2:
 
         return triplet_list
 
-    def morpheme_analysis(self, sentence):
+    @staticmethod
+    def morpheme_analysis(sentence):
         """
         1文の形態素解析を行う
         :param sentence: 入力文
@@ -107,7 +129,8 @@ class Bot2:
 
         return triplet
 
-    def search_triplet(self, triplet_list, prefixes):
+    @staticmethod
+    def search_triplet(triplet_list, prefixes):
         """
         三つ組のlistの中から条件(prefixes)に適する三つ組を取得
         :param triplet_list: 三つ組のlist
@@ -124,5 +147,5 @@ class Bot2:
 
 
 if __name__ == '__main__':
-    bot = Bot2("vocabulary.txt", 1)
+    bot = Bot2("vocabulary.txt", 5)
     bot.utter()
