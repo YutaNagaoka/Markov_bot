@@ -31,12 +31,12 @@ class Bot2:
         self.corpus_path = corpus_path
 
     @measure_time
-    def utter(self):
+    def utter(self, n):
         """
         n回発話し、ユーザとのインターフェースになる
         """
         triplet_list = self.txt2triplet()
-        for i in range(self.n):
+        for i in range(n):
             utterance = self.generate_text(triplet_list)
             print(utterance)
         print(os.linesep)
