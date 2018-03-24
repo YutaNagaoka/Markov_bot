@@ -14,9 +14,7 @@ def make_DB_file(input_file_name, output_file_name):
 
     with open(output_file_name, "w", encoding="utf-8") as f_out:
         for triplet in triplet_list:
-            for m in triplet:
-                f_out.write(m + " ")
-            f_out.write("\n")
+            f_out.write(",".join(triplet) + "\n")
 
     print("Succeeded!")
 
