@@ -1,7 +1,10 @@
 import random
-from janome.tokenizer import Tokenizer
 import os
 from measure_time import measure_time
+try:
+    from janome.tokenizer import Tokenizer
+except ImportError as e:
+    pass
 
 t = Tokenizer()
 
@@ -29,13 +32,14 @@ class Bot2:
 
     def __init__(self, corpus_path):
         self.corpus_path = corpus_path
+        self.triplet_list = self.txt2triplet()
 
     @measure_time
     def utter(self, n):
         """
         n回発話し、ユーザとのインターフェースになる
         """
-        triplet_list = self.txt2triplet()
+        triplet_list = self.triplet_list
         for i in range(n):
             utterance = self.generate_text(triplet_list)
             print(utterance)
@@ -45,7 +49,7 @@ class Bot2:
         """
         任意の回数会話を繰り返す
         """
-        triplet_list = self.txt2triplet()
+        triplet_list = self.triplet_list
         while True:
             s = input("Press Enter> ")
             if s == "quit":
@@ -143,10 +147,40 @@ class Bot2:
         return result
 
 
-if __name__ == '__main__':
-    bot = Bot2("vocabulary.txt")
-    # n回発話
-    # bot.utter(5)
+class Bot2_neo(Bot2):
+    def __init__(self, corpus_path):
+        self.corpus_path = corpus_path
+        self.triplet_list = self.DB2triplet()
 
-    # 任意の回数発話
-    bot.dialogue()
+    def utter(self, n):
+        # triplet_list = self.DB2triplet()
+        # for i in range(n):
+        #     utterance = self.generate_text(triplet_list)
+        #     print(utterance)
+        # print(os.linesep)
+        super().utter(n)
+
+    def dialogue(self):
+        # triplet_list = self.DB2triplet()
+        # while True:
+        #     s = input("Press Enter> ")
+        #     if s == "quit":
+        #         break
+        #     utterance = self.generate_text(triplet_list)
+        #     print(utterance)
+        # print(os.linesep)
+        super().dialogue()
+
+    def DB2triplet(self):
+        """
+        3-gramで分割されたコーパスを読み込む
+        :return: 三つ組のlist(二次元list)
+        """
+        triplet_list = []
+
+        with open(self.corpus_path, "r", encoding="utf-8") as corpus:
+            for triplet in corpus:
+                t = triplet.strip().split(",")
+                triplet_list.append(t)
+
+        return triplet_list
