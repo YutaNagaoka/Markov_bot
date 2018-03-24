@@ -34,7 +34,6 @@ class Bot2:
         self.corpus_path = corpus_path
         self.triplet_list = self.txt2triplet()
 
-    @measure_time
     def utter(self, n):
         """
         n回発話し、ユーザとのインターフェースになる

@@ -1,5 +1,4 @@
 from bot import Bot2
-import os
 
 
 def make_DB_file(input_file_name, output_file_name):

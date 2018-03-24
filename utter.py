@@ -6,4 +6,4 @@ if __name__ == '__main__':
     # bot.utter(50)
 
     bot = Bot2_neo("vocabulary_DB.txt")
-    bot.utter(5)
+    bot.utter(30)
