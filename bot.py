@@ -60,8 +60,8 @@ class Bot2:
             # エラー処理
             if utterance == "":
                 continue
-            print(utterance)
-        print(os.linesep)
+            print(utterance)    # ここは実際にはマイクから発話するメソッドが入る
+        # print(os.linesep)
 
     def generate_text(self, triplet_list):
         """
@@ -92,7 +92,6 @@ class Bot2:
         result = "".join(utterance[:-1])
         return result
 
-    @measure_time
     def txt2triplet(self):
         """
         コーパスの全文を形態素解析して三つ組に分割する
@@ -180,6 +179,7 @@ class Bot2_neo(Bot2):
         # print(os.linesep)
         super().dialogue()
 
+    @measure_time
     def DB2triplet(self):
         """
         3-gramで分割されたコーパスを読み込む
