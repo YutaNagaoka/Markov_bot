@@ -41,6 +41,9 @@ class Bot2:
         triplet_list = self.triplet_list
         for i in range(n):
             utterance = self.generate_text(triplet_list)
+            # エラー処理
+            if utterance == "":
+                continue
             print(utterance)
         print(os.linesep)
 
@@ -54,6 +57,9 @@ class Bot2:
             if s == "quit":
                 break
             utterance = self.generate_text(triplet_list)
+            # エラー処理
+            if utterance == "":
+                continue
             print(utterance)
         print(os.linesep)
 
@@ -76,7 +82,11 @@ class Bot2:
         while utterance[-1] != self.END:
             prefix1 = utterance[-2]
             prefix2 = utterance[-1]
-            triplet = self.search_triplet(triplet_list, (prefix1, prefix2))
+            # エラー処理
+            try:
+                triplet = self.search_triplet(triplet_list, (prefix1, prefix2))
+            except IndexError:
+                return ""
             utterance.append(triplet[2])
 
         result = "".join(utterance[:-1])
@@ -179,7 +189,7 @@ class Bot2_neo(Bot2):
 
         with open(self.corpus_path, "r", encoding="utf-8") as corpus:
             for triplet in corpus:
-                t = triplet.strip().split(",")
-                triplet_list.append(t)
+                t_list = triplet.strip().split(",")
+                triplet_list.append(t_list)
 
         return triplet_list
