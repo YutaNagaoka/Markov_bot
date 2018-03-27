@@ -3,13 +3,11 @@ import os
 from measure_time import measure_time
 try:
     from janome.tokenizer import Tokenizer
+    t = Tokenizer()
 except ImportError as e:
     pass
 
-t = Tokenizer()
 
-
-# ボツ
 class Bot1:
     def __init__(self, corpus, word_length):
         self.corpus = corpus
@@ -51,6 +49,8 @@ class Bot2:
         """
         任意の回数会話を繰り返す
         """
+        print("Press enter to have bot speak, or input 'quit' to exit program.")
+
         triplet_list = self.triplet_list
         while True:
             s = input("Press Enter> ")
