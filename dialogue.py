@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 
 # あらかじめ call_jtalk.sh に実行権限を与えておく
 def jtalk(t):
-    subprocess.call("echo call_jtalk.sh" + t, shell=True)
+    subprocess.call(["echo call_jtalk.sh" + t], shell=True)
 
 
 if __name__ == '__main__':
@@ -38,4 +38,8 @@ if __name__ == '__main__':
                 data += client.recv(1024)
 
     except KeyboardInterrupt:
+        client.close()
+        print("Keyboard interrupt occur.")
+        p.kill()
+        subprocess.call(["kill " + pid], shell=True)
         client.close()
