@@ -1,10 +1,10 @@
 import random
 import os
-from measure_time import measure_time
+# from measure_time import measure_time
 try:
     from janome.tokenizer import Tokenizer
     t = Tokenizer()
-except ImportError as e:
+except ImportError:
     pass
 
 
@@ -161,25 +161,11 @@ class Bot2_neo(Bot2):
         self.triplet_list = self.DB2triplet()
 
     def utter(self, n):
-        # triplet_list = self.DB2triplet()
-        # for i in range(n):
-        #     utterance = self.generate_text(triplet_list)
-        #     print(utterance)
-        # print(os.linesep)
         super().utter(n)
 
     def dialogue(self):
-        # triplet_list = self.DB2triplet()
-        # while True:
-        #     s = input("Press Enter> ")
-        #     if s == "quit":
-        #         break
-        #     utterance = self.generate_text(triplet_list)
-        #     print(utterance)
-        # print(os.linesep)
         super().dialogue()
 
-    @measure_time
     def DB2triplet(self):
         """
         3-gramで分割されたコーパスを読み込む
