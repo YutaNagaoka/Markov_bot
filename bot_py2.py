@@ -10,8 +10,7 @@ class Bot2_neo:
         """
         n回発話し、ユーザとのインターフェースになる
         """
-        triplet_list = self.triplet_list
-        utterance = self.generate_text(triplet_list)
+        utterance = self.generate_text(self.triplet_list)
         print utterance
         
     def generate_text(self, triplet_list):
@@ -65,9 +64,9 @@ class Bot2_neo:
         """
         triplet_list = []
 
-        with open(self.corpus_path, "r", encoding="utf-8") as corpus:
-            for triplet in corpus:
-                t_list = triplet.strip().split(",")
-                triplet_list.append(t_list)
+        corpus = codecs.open(self.coupus_path, 'r', 'utf-8')
+        for triplet in corpus:
+            t_list = triplet.strip().split(",")
+            triplet_list.append(t_list)
 
         return triplet_list
